@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aste586"
+version = "0.1.0"
+description = "ASTE 586 Spacecraft Attitude Dynamics computer project"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "pyyaml>=6.0",
+    "pybullet>=3.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+aste586 = "aste586.cli:main"
+
+[tool.setuptools.packages.find]
+# Two roots: the student-facing package (src/aste586) and the hidden
+# reference backend (reference/aste586_reference). The student release
+# ships only `src`; see tools/make_student_release.py.
+where = ["src", "reference"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,27 @@
+# Part 4 -- INTELSAT-inspired damper spot-check.
+# Expect the nutation angle to fall from ~4 deg to ~2.7 deg and the kinetic
+# energy to decrease from ~1.529e6 J and level off.
+name: part4_intelsat
+part: 4
+model: damped
+tf: 5.0
+n_points: 5000
+integrator:
+  method: DOP853
+  rtol: 1.0e-8
+  atol: 1.0e-9
+inertia: [300.0, 300.0, 1200.0]
+initial:
+  omega: [14.0, 0.0, 50.0]
+damper:
+  Id: 0.5
+  D: 120.0
+  K: 1.0
+  theta_d: 0.0
+  omega_d: 0.0
+analysis:
+  reference_axis: 3
+viz:
+  shape: cylinder
+  radius: 0.9
+  height: 1.0

@@ -1,0 +1,17 @@
+# Part 1 -- linear initial-value-problem warm-up.
+name: part1_ivp
+part: 1
+model: linear
+tf: 10.0
+n_points: 20000          # the 200 rad/s mode needs a fine output grid
+integrator:
+  method: DOP853
+  rtol: 1.0e-11
+  atol: 1.0e-12
+linear:
+  A:
+    - [0, 2, 0, 0]
+    - [-2, 0, 0, 0]
+    - [0, 0, 0, 200]
+    - [0, 0, -200, 0]
+  x0: [1, 0, 1, 0]

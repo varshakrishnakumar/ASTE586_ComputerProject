@@ -1,0 +1,25 @@
+# Part 3 -- spinning satellite with an off-axis antenna (dish/Earth-line).
+# Uniform cylinder: h = 0.59 m, R = 0.36 m, m = 39 kg.
+#   I1 = I2 = m/12 h^2 + m/4 R^2 = 2.3949 kg m^2
+#   I3 = m/2 R^2                 = 2.5272 kg m^2
+# Spin is 45 RPM (4.712 rad/s) along the antenna axis, which is offset 5 deg
+# from the symmetry axis (body-3) in the body 1-3 plane.
+name: part3_dish_earthline
+part: 3
+model: rigid
+tf: 50.0
+n_points: 5000
+integrator:
+  method: DOP853
+  rtol: 1.0e-10
+  atol: 1.0e-11
+inertia: [2.3949, 2.3949, 2.5272]
+initial:
+  omega: [0.41072, 0.0, 4.69413]   # 4.712 rad/s along [sin5, 0, cos5]
+analysis:
+  reference_axis: 3
+geometry:
+  shape: cylinder
+  radius: 0.36
+  height: 0.59
+  antenna_axis: [0.08716, 0.0, 0.99619]   # 5 deg off body-3

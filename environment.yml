@@ -1,0 +1,17 @@
+# Conda environment for the ASTE 586 computer project.
+#   conda env create -f environment.yml
+#   conda activate aste586
+#   pip install -e .
+name: aste586
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy>=1.24
+  - scipy>=1.10
+  - matplotlib>=3.7
+  - pyyaml>=6.0
+  - pytest>=7.0
+  - pip
+  - pip:
+      - pybullet>=3.2

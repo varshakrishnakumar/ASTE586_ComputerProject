@@ -1,0 +1,25 @@
+# Part 4 -- non-symmetric body with a damper. The spin transitions from the
+# minor-inertia axis toward the major-inertia axis as energy is lost.
+name: part4_nonsymmetric
+part: 4
+model: damped
+tf: 150.0
+n_points: 6000
+integrator:
+  method: DOP853
+  rtol: 1.0e-9
+  atol: 1.0e-10
+inertia: [45.0, 60.0, 31.0]
+initial:
+  omega: [0.0, 40.0, 70.0]
+damper:
+  Id: 0.5
+  D: 540.0
+  K: 20.0
+  theta_d: 0.0
+  omega_d: 0.0
+analysis:
+  reference_axis: 3
+viz:
+  shape: box
+  half_extents: [0.40, 0.48, 0.32]

@@ -1,0 +1,27 @@
+# Part 4 -- Explorer I flat spin. Over ~90 minutes the nutation angle grows
+# toward 60 deg as energy is dissipated.
+# This is a long run (tf = 7200 s) and may take a few minutes to integrate.
+name: part4_flat_spin
+part: 4
+model: damped
+tf: 7200.0
+n_points: 3600          # 0.5 Hz output; enough for the nutation envelope
+integrator:
+  method: DOP853
+  rtol: 1.0e-9
+  atol: 1.0e-10
+inertia: [4.388, 4.388, 0.0585]
+initial:
+  omega: [0.0419, 0.0, 60.0]
+damper:
+  Id: 0.1
+  D: 1.5
+  K: 0.064
+  theta_d: 0.0
+  omega_d: 0.0
+analysis:
+  reference_axis: 3
+viz:
+  shape: cylinder
+  radius: 0.25
+  height: 1.2

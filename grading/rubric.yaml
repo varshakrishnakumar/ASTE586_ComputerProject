@@ -1,0 +1,22 @@
+# Grading tolerances. `default` applies to every scenario; a block named
+# after a scenario overrides individual keys for that scenario.
+#
+#   quat_norm      max allowed ||q| - 1|
+#   H_drift        max allowed drift of angular momentum in the inertial frame
+#   energy_spread  max allowed spread of kinetic energy (rigid: conserved)
+#   energy_rise    max allowed per-step increase of kinetic energy (damped)
+#   linear_error   max allowed |numerical - analytical| (Part 1)
+#   match          max allowed |student - reference| component-wise
+
+default:
+  quat_norm: 1.0e-4
+  H_drift: 1.0e-1
+  energy_spread: 1.0e-2
+  energy_rise: 1.0e-3
+  linear_error: 1.0e-3
+  match: 1.0e-4
+
+# Long 7200 s integration: looser bounds on accumulated drift.
+part4_flat_spin:
+  H_drift: 5.0
+  energy_rise: 1.0e-2

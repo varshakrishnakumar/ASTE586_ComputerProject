@@ -1,0 +1,19 @@
+# Part 2 -- axisymmetric body, retrograde precession.
+# Symmetry axis is body-1 (I2 = I3, I1 largest)  ->  I_sym > I_lat.
+name: part2_retrograde_precession
+part: 2
+model: rigid
+tf: 200.0
+n_points: 2000
+integrator:
+  method: DOP853
+  rtol: 1.0e-9
+  atol: 1.0e-10
+inertia: [5.0, 4.0, 4.0]          # I1, I2, I3  (kg m^2)
+initial:
+  omega: [0.0592, 0.0, 0.0740]    # rad/s, body coords -> 45 deg nutation
+analysis:
+  reference_axis: 1
+viz:
+  shape: box
+  half_extents: [0.45, 0.30, 0.30]

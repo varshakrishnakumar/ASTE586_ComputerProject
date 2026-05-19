@@ -1,0 +1,19 @@
+# Part 3 -- the intermediate-axis instability. The angular velocity starts
+# near the middle-inertia axis (body-2) and does not stay there.
+name: part3_middle_axis
+part: 3
+model: rigid
+tf: 30.0
+n_points: 3000
+integrator:
+  method: DOP853
+  rtol: 1.0e-10
+  atol: 1.0e-11
+inertia: [3.0, 4.0, 5.0]
+initial:
+  omega: [0.1, 4.0, 0.0]      # almost along the unstable middle axis
+analysis:
+  reference_axis: 2
+viz:
+  shape: box
+  half_extents: [0.45, 0.38, 0.28]

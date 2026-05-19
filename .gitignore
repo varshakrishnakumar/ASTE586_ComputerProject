@@ -1,0 +1,22 @@
+# Run artifacts (never committed; produced by `aste586 run`)
+runs/
+
+# Hidden reference implementation is stripped from the student release
+# (kept in the instructor repo; see tools/make_student_release.py).
+# It is NOT gitignored here because the instructor repo tracks it.
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

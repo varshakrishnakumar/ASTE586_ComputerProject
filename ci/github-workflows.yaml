@@ -1,0 +1,20 @@
+# Copy to .github/workflows/ci.yaml to enable.
+# Runs the test suite and exercises the reference backend on every config.
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      - name: Smoke-test reference backend on all configs
+        run: |
+          for c in configs/*.yaml; do
+            name=$(basename "$c" .yaml)
+            aste586 run "$name" --backend reference
+          done
