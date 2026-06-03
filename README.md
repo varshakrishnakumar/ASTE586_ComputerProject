@@ -24,6 +24,19 @@ conda activate aste586
 pip install -e .
 ```
 
+PyBullet (used by `aste586 view`) is installed as a conda-forge binary by
+the environment above — no compilation step on any platform.
+
+## Self-check
+
+```bash
+pytest -q                              # 10 tests for the harness
+aste586 grade part2_direct_precession  # full pass/fail report on your code
+```
+
+If `aste586 <verb>` ever fails to start (rare; an editable-install quirk),
+`python -m aste586.cli <verb> ...` is the equivalent fallback.
+
 ## Use
 
 Everything is driven by **named scenarios** in `configs/`. You never create,

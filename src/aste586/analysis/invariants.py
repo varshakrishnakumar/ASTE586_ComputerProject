@@ -58,12 +58,12 @@ def kinetic_energy(
     """Rotational kinetic energy ``(N,)``.
 
     Rigid body: ``T = 1/2 omega . J omega``. Damped body (Part 4 Eq 16) adds
-    the wheel kinetic energy, the gyroscopic cross term, and the spring
-    potential.
+    the wheel kinetic energy, the gyroscopic cross term about the wheel's
+    spin axis (body-2), and the spring potential.
     """
     T = 0.5 * np.einsum("ni,ij,nj->n", omega, J, omega)
     if theta_d is not None and omega_d is not None and Id != 0.0:
         T = T + (0.5 * Id * omega_d**2
-                 + Id * omega[:, 2] * omega_d
+                 + Id * omega[:, 1] * omega_d      # wheel is on body axis 2
                  + 0.5 * K * theta_d**2)
     return T
