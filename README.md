@@ -21,8 +21,14 @@ The interface you implement against is documented in
 ```bash
 conda env create -f environment.yml
 conda activate aste586
-pip install -e .
+pip install --no-user-site -e .
 ```
+
+The `--no-user-site` flag prevents pip from treating packages installed for a
+different Python version (e.g. a system Python 3.9) as already satisfying
+requirements.  Without it, macOS machines with a pre-existing user-level numpy
+or matplotlib can silently end up with ABI-mismatched C extensions and obscure
+import errors.
 
 PyBullet (used by `aste586 view`) is installed as a conda-forge binary by
 the environment above — no compilation step on any platform.
