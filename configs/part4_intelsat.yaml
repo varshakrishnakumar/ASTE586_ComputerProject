@@ -2,6 +2,7 @@
 # Expect the nutation angle to fall from ~4 deg to ~2.7 deg and the kinetic
 # energy to decrease from ~1.529e6 J and level off.
 name: part4_intelsat
+description: "INTELSAT-style damper spot-check: nutation 4.0 -> 2.75 deg, energy decreases"
 part: 4
 model: damped
 tf: 5.0

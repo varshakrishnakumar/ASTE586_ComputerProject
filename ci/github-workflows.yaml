@@ -1,5 +1,7 @@
 # Copy to .github/workflows/ci.yaml to enable.
-# Runs the test suite and exercises the reference backend on every config.
+# Runs the test suite in the instructor checkout, then builds the student
+# release and proves that `aste586 check` / `aste586 grade` work in it
+# without the reference backend.
 name: ci
 on: [push, pull_request]
 jobs:
@@ -15,6 +17,15 @@ jobs:
       - name: Smoke-test reference backend on all configs
         run: |
           for c in configs/*.yaml; do
-            name=$(basename "$c" .yaml)
-            aste586 run "$name" --backend reference
+            aste586 run "$(basename "$c" .yaml)" --backend reference
           done
+      - name: Build the student release
+        run: python tools/make_student_release.py /tmp/aste586_student
+      - name: Student release works without the reference
+        run: |
+          cd /tmp/aste586_student
+          pip install -e ".[dev]"
+          pytest -q
+          aste586 list
+          aste586 check || true      # stubs -> exit 1, but must not crash
+          aste586 grade part1_ivp || true

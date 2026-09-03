@@ -1,6 +1,7 @@
 # Part 4 -- non-symmetric body with a damper. The spin transitions from the
 # minor-inertia axis toward the major-inertia axis as energy is lost.
 name: part4_nonsymmetric
+description: "damped non-symmetric body moving from minor- toward major-axis spin (~30 s to integrate)"
 part: 4
 model: damped
 tf: 150.0

@@ -1,6 +1,7 @@
 # Part 2 -- axisymmetric body, direct precession.
 # Symmetry axis is body-2 (I1 = I3, I2 smallest)  ->  I_lat > I_sym.
 name: part2_direct_precession
+description: "axisymmetric body, symmetry axis 2 (oblate): 10 deg nutation, direct precession"
 part: 2
 model: rigid
 tf: 200.0

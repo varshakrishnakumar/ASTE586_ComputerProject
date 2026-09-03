@@ -42,7 +42,7 @@ def state_derivative(t: float, z: np.ndarray, params: Params) -> np.ndarray:
         ``dz/dt``, the same length as ``z``.
     """
     raise NotImplementedError(
-        "Part 2: implement state_derivative -- unpack z, call euler_eqs and "
-        "quaternion_derivative, pack dz. Extend it for params.model == "
-        "'damped' in Part 4 using damper_eom."
+        "Part 2: implement state_derivative in src/aste586/dynamics/derivatives.py "
+        "-- unpack z, call euler_eqs and quaternion_derivative, pack dz. Extend "
+        "it for params.model == 'damped' in Part 4 using damper_eom."
     )

@@ -27,7 +27,8 @@ def linear_ivp_rhs(t: float, x: np.ndarray, A: np.ndarray) -> np.ndarray:
         ``dx/dt``.
     """
     raise NotImplementedError(
-        "Part 1: implement linear_ivp_rhs -- return A @ x"
+        "Part 1: implement linear_ivp_rhs in src/aste586/dynamics/part1.py -- "
+        "return dx/dt = A x"
     )
 
 
@@ -48,6 +49,6 @@ def analytical_solution(t: np.ndarray) -> np.ndarray:
         The exact state at each time.
     """
     raise NotImplementedError(
-        "Part 1: implement analytical_solution -- return the closed form "
-        "x(t) you derived by hand"
+        "Part 1: implement analytical_solution in src/aste586/dynamics/part1.py "
+        "-- return the closed form x(t) you derived by hand"
     )

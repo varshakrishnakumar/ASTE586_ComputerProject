@@ -37,6 +37,21 @@ def list_configs() -> list[str]:
     return sorted(p.stem for p in cfg_dir.glob("*.yaml"))
 
 
+def describe_configs() -> list[dict]:
+    """One summary row per scenario: name, part, model, tf, description."""
+    rows = []
+    for name in list_configs():
+        cfg = load_config(name)
+        rows.append({
+            "name": name,
+            "part": int(cfg["part"]),
+            "model": cfg["model"],
+            "tf": float(cfg["tf"]),
+            "description": cfg.get("description", ""),
+        })
+    return rows
+
+
 _REQUIRED = {"name", "part", "model", "tf", "n_points"}
 _MODELS = {"linear", "rigid", "damped"}
 

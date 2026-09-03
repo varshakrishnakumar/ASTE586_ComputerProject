@@ -1,6 +1,7 @@
 # Part 3 -- the intermediate-axis instability. The angular velocity starts
 # near the middle-inertia axis (body-2) and does not stay there.
 name: part3_middle_axis
+description: "spin started near the intermediate axis: the tumbling instability"
 part: 3
 model: rigid
 tf: 30.0

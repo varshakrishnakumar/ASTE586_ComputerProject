@@ -12,6 +12,8 @@ dependencies = [
     "scipy>=1.10",
     "matplotlib>=3.7",
     "pyyaml>=6.0",
+    # Install from conda-forge (see environment.yml): PyPI has no prebuilt
+    # wheel for Apple Silicon and the source build fails on recent Xcode SDKs.
     "pybullet>=3.2",
 ]
 

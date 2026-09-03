@@ -25,6 +25,6 @@ def quaternion_derivative(q: np.ndarray, omega: np.ndarray) -> np.ndarray:
         ``dq/dt``.
     """
     raise NotImplementedError(
-        "Part 2: implement quaternion_derivative -- the quaternion kinematic "
-        "equation"
+        "Part 2: implement quaternion_derivative in "
+        "src/aste586/dynamics/kinematics.py -- the quaternion kinematic equation"
     )

@@ -22,7 +22,7 @@ from ..analysis import (
     quaternion_norm,
 )
 from ..conventions import enforce_sign_continuity, quat_to_matrix
-from ..io import RunArtifact, load_config, save_run
+from ..io import RunArtifact, config_path, load_config, save_run
 from ..model import IDX_OMEGA_D, IDX_Q, IDX_THETA_D, IDX_W
 from .integrator import integrate
 from .scenario import Scenario, build_scenario
@@ -48,14 +48,20 @@ def load_backend(name: str) -> ModuleType:
     raise ValueError(f"unknown backend {name!r}; use 'student' or 'reference'")
 
 
-def _backend_hash(backend: ModuleType) -> str:
+def backend_hash(backend: ModuleType) -> str:
     """Short content hash of the backend's source -- recorded in meta.json so a
-    run can be traced to the exact code that produced it."""
+    run can be traced to the exact code that produced it, and so the CLI can
+    tell when a stored run is stale."""
     h = hashlib.sha256()
     pkg_dir = Path(backend.__path__[0])
     for path in sorted(pkg_dir.glob("*.py")):
         h.update(path.read_bytes())
     return h.hexdigest()[:12]
+
+
+def config_hash(scenario: str) -> str:
+    """Short content hash of the scenario's YAML file."""
+    return hashlib.sha256(config_path(scenario).read_bytes()).hexdigest()[:12]
 
 
 def _integrator_opts(scn: Scenario) -> dict:
@@ -81,7 +87,10 @@ def run(scenario: str, backend: str = "student") -> RunArtifact:
         "model": scn.model,
         "integrator": {"method": "DOP853", "rtol": 1e-9, "atol": 1e-9, **opts},
         "geometry": scn.extras["geometry"],
-        "backend_hash": _backend_hash(backend_mod),
+        "viz": scn.extras["viz"],
+        "analysis": scn.extras["analysis"],
+        "backend_hash": backend_hash(backend_mod),
+        "config_hash": config_hash(scenario),
     }
 
     if scn.model == "linear":

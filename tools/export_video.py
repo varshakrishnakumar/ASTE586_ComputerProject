@@ -15,7 +15,6 @@ import argparse
 
 import numpy as np
 
-from aste586.conventions import quat_to_matrix
 from aste586.io import load_run, run_dir
 from aste586.sim import run as run_scenario
 
@@ -37,11 +36,8 @@ def main() -> int:
     import pybullet as p
 
     p.connect(p.DIRECT)
-    geom = artifact.meta.get("geometry") or {}
-    he = [float(x) for x in geom.get("half_extents", [0.35, 0.22, 0.45])]
-    vis = p.createVisualShape(p.GEOM_BOX, halfExtents=he,
-                              rgbaColor=[0.5, 0.6, 0.85, 1.0])
-    body = p.createMultiBody(baseMass=0.0, baseVisualShapeIndex=vis)
+    from aste586.viz.viewer import body_geometry, make_body
+    body = make_body(p, body_geometry(artifact))
 
     frames_dir = run_dir(args.scenario, args.backend) / "frames"
     frames_dir.mkdir(exist_ok=True)

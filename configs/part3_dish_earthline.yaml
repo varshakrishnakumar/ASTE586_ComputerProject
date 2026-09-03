@@ -5,6 +5,7 @@
 # Spin is 45 RPM (4.712 rad/s) along the antenna axis, which is offset 5 deg
 # from the symmetry axis (body-3) in the body 1-3 plane.
 name: part3_dish_earthline
+description: "spinning cylinder (45 RPM) with an antenna 5 deg off the spin axis; off-nadir angle"
 part: 3
 model: rigid
 tf: 50.0

@@ -7,7 +7,7 @@ Root cause of the failure pattern (issues #2 and #3): macOS users who have a
 pre-existing Python 3.9 user-level site-packages directory cause `pip install`
 inside the conda env to say "Requirement already satisfied" for numpy/matplotlib
 while pointing at the Python 3.9 copies.  At runtime, Python 3.11 loads those
-Python-3.9-compiled C extensions and fails.  Fix: `pip install --no-user-site -e .`
+Python-3.9-compiled C extensions and fails.  Fix: `python -s -m pip install -e .`
 """
 
 import importlib

@@ -27,5 +27,6 @@ def euler_eqs(omega: np.ndarray, J: np.ndarray, torque: np.ndarray) -> np.ndarra
         Angular acceleration ``alpha`` (rad/s^2).
     """
     raise NotImplementedError(
-        "Part 2: implement euler_eqs -- Euler's equations for a rigid body"
+        "Part 2: implement euler_eqs in src/aste586/dynamics/rigid_body.py -- "
+        "Euler's equations for a rigid body"
     )

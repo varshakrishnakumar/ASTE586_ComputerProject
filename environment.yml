@@ -1,7 +1,7 @@
 # Conda environment for the ASTE 586 computer project.
 #   conda env create -f environment.yml
 #   conda activate aste586
-#   pip install -e .
+#   python -s -m pip install -e .
 #
 # PyBullet is pulled from conda-forge so macOS Apple-Silicon users get a
 # prebuilt binary instead of compiling from source (PyPI has no arm64 wheels

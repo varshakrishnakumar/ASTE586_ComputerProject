@@ -4,9 +4,12 @@
 #   quat_norm      max allowed ||q| - 1|
 #   H_drift        max allowed drift of angular momentum in the inertial frame
 #   energy_spread  max allowed spread of kinetic energy (rigid: conserved)
-#   energy_rise    max allowed per-step increase of kinetic energy (damped)
+#   energy_rise    max allowed increase between consecutive block-averaged
+#                  values of the energy (damped; the average removes ripple)
 #   linear_error   max allowed |numerical - analytical| (Part 1)
-#   match          max allowed |student - reference| component-wise
+#   match          max allowed |student - reference| component-wise. A correct
+#                  implementation written differently from the reference lands
+#                  at ~1e-6 on the worst scenario, so 1e-4 is not tight.
 
 default:
   quat_norm: 1.0e-4

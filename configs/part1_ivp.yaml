@@ -1,5 +1,6 @@
 # Part 1 -- linear initial-value-problem warm-up.
 name: part1_ivp
+description: "linear IVP warm-up: 2 rad/s and 200 rad/s rotations, checked against your closed form"
 part: 1
 model: linear
 tf: 10.0

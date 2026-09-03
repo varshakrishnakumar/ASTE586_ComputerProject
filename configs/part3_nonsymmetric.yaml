@@ -1,6 +1,7 @@
 # Part 3 -- non-axisymmetric body. The angular velocity rides a polhode that
 # encircles the major-inertia axis (body-3).
 name: part3_nonsymmetric
+description: "three distinct inertias, spin near the major axis: a closed polhode"
 part: 3
 model: rigid
 tf: 3.0

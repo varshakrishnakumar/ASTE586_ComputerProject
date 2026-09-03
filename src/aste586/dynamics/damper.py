@@ -52,5 +52,6 @@ def damper_eom(
     Eq 5 uses the result of Eq 2 -- compute ``alpha2`` before ``omega_d_dot``.
     """
     raise NotImplementedError(
-        "Part 4: implement damper_eom -- Eqs 1-5 of the handout"
+        "Part 4: implement damper_eom in src/aste586/dynamics/damper.py -- "
+        "Eqs 1-5 of the handout"
     )

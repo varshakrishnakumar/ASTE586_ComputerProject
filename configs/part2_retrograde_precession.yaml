@@ -1,6 +1,7 @@
 # Part 2 -- axisymmetric body, retrograde precession.
 # Symmetry axis is body-1 (I2 = I3, I1 largest)  ->  I_sym > I_lat.
 name: part2_retrograde_precession
+description: "axisymmetric body, symmetry axis 1 (prolate): 45 deg nutation, retrograde precession"
 part: 2
 model: rigid
 tf: 200.0

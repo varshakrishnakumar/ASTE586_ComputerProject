@@ -2,6 +2,7 @@
 # toward 60 deg as energy is dissipated.
 # This is a long run (tf = 7200 s) and may take a few minutes to integrate.
 name: part4_flat_spin
+description: "Explorer I: minor-axis spin decays to a flat spin over 2 hours (~30 s to integrate)"
 part: 4
 model: damped
 tf: 7200.0
