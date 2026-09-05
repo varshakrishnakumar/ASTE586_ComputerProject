@@ -34,6 +34,11 @@ the environment above — no compilation step on any platform. That is why the
 conda environment is the supported route: a plain `pip install` tries to
 build PyBullet from source on Apple Silicon and fails.
 
+For future reference, the command to remove this conda environment is
+```bash
+conda env remove -n aste586
+```
+
 Check that the install worked:
 
 ```bash
