@@ -24,22 +24,26 @@ def quat_multiply(p: np.ndarray, r: np.ndarray) -> np.ndarray:
     """Hamilton product ``p (x) r`` for scalar-last quaternions."""
     px, py, pz, pw = p
     rx, ry, rz, rw = r
-    return np.array([
-        pw * rx + px * rw + py * rz - pz * ry,
-        pw * ry - px * rz + py * rw + pz * rx,
-        pw * rz + px * ry - py * rx + pz * rw,
-        pw * rw - px * rx - py * ry - pz * rz,
-    ])
+    return np.array(
+        [
+            pw * rx + px * rw + py * rz - pz * ry,
+            pw * ry - px * rz + py * rw + pz * rx,
+            pw * rz + px * ry - py * rx + pz * rw,
+            pw * rw - px * rx - py * ry - pz * rz,
+        ]
+    )
 
 
 def quat_to_matrix(q: np.ndarray) -> np.ndarray:
     """Body->inertial rotation matrix ``C^FC`` from a scalar-last quaternion."""
     x, y, z, w = quat_normalize(q)
-    return np.array([
-        [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
-        [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
-        [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)],
-    ])
+    return np.array(
+        [
+            [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+            [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+            [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)],
+        ]
+    )
 
 
 def matrix_to_quat(R: np.ndarray) -> np.ndarray:
@@ -84,19 +88,3 @@ def enforce_sign_continuity(quats: np.ndarray) -> np.ndarray:
         if np.dot(quats[i], quats[i - 1]) < 0.0:
             quats[i] = -quats[i]
     return quats
-
-
-def rotation_between(a: np.ndarray, b: np.ndarray) -> np.ndarray:
-    """Smallest-angle rotation matrix taking unit vector ``a`` onto ``b``."""
-    a = a / np.linalg.norm(a)
-    b = b / np.linalg.norm(b)
-    v = np.cross(a, b)
-    c = float(np.dot(a, b))
-    if c < -1.0 + 1e-12:  # anti-parallel: rotate 180 deg about any normal
-        axis = np.cross(a, [1.0, 0.0, 0.0])
-        if np.linalg.norm(axis) < 1e-9:
-            axis = np.cross(a, [0.0, 1.0, 0.0])
-        axis /= np.linalg.norm(axis)
-        return 2.0 * np.outer(axis, axis) - np.eye(3)
-    vx = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
-    return np.eye(3) + vx + vx @ vx / (1.0 + c)
