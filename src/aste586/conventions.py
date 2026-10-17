@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import numpy as np
 
+IDENTITY_Q = np.array([0.0, 0.0, 0.0, 1.0])
+
 
 def quat_normalize(q: np.ndarray) -> np.ndarray:
     """Return ``q`` rescaled to unit norm."""
