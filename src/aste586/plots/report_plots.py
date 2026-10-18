@@ -78,6 +78,18 @@ def _plot_linear(a: RunArtifact, plt) -> list[tuple[str, plt.Figure]]:  # noqa: 
         ax.set_xlabel("time (s)")
     fig1.suptitle(f"{a.scenario}: numerical vs analytical")
 
+    fig1b, axes = plt.subplots(
+        2, 2, figsize=(10, 6), sharex=True, constrained_layout=True
+    )
+    for k, ax in enumerate(axes.flat):
+        ax.plot(t, x[:, k] - x_a[:, k], label="diff")
+        ax.set_title(f"x{k + 1}")
+        ax.grid(alpha=0.3)
+    axes[0, 0].legend()
+    for ax in axes[1, :]:
+        ax.set_xlabel("time (s)")
+    fig1b.suptitle(f"{a.scenario}: numerical minus analytical")
+
     fig2, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4), constrained_layout=True)
     ax1.semilogy(t, np.maximum(err.max(axis=1), 1e-300))
     ax1.set(title="max component error", xlabel="time (s)", ylabel="|num - ana|")
@@ -85,7 +97,7 @@ def _plot_linear(a: RunArtifact, plt) -> list[tuple[str, plt.Figure]]:  # noqa: 
     ax2.plot(t, a["conserved"])
     ax2.set(title=r"$\sum x_i^2 - 2$", xlabel="time (s)")
     ax2.grid(alpha=0.3)
-    return [("components", fig1), ("accuracy", fig2)]
+    return [("components", fig1), ("components-error", fig1b), ("accuracy", fig2)]
 
 
 def _plot_attitude(a: RunArtifact, plt) -> list[tuple[str, plt.Figure]]:  # noqa: F821

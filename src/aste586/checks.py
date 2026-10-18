@@ -251,12 +251,7 @@ def _check_kinematics(s: _Suite) -> None:
             (
                 [0.1, -0.2, 0.3, 0.927361849549570],
                 [0.5, -1.0, 2.0],
-                [
-                    0.18184046238739257,
-                    -0.48868092477478514,
-                    0.9273618495495703,
-                    -0.42500000000000016,
-                ],
+                [0.18184046238739257, -0.48868092477478514, 0.9273618495495703, -0.425],
             ),
             ([0.5, 0.5, 0.5, 0.5], [0.0, 0.0, 3.0], [0.75, -0.75, 0.75, -0.75]),
         ]
@@ -459,7 +454,8 @@ def _check_derivatives(s: _Suite) -> None:
         "rigid: known value",
         rigid_known,
         needs=("euler_eqs", "quaternion_derivative"),
-        hint="this fails only if euler_eqs or quaternion_derivative is wrong -- fix those first.",
+        hint="this fails only if euler_eqs or quaternion_derivative "
+        "is wrong -- fix those first.",
     )
     s.run(
         f,
@@ -533,14 +529,16 @@ def _check_derivatives(s: _Suite) -> None:
         "damped: packs [alpha, dq/dt, theta_d', omega_d']",
         damped_glue,
         needs=("damper_eom", "quaternion_derivative"),
-        hint="use damper_eom (not euler_eqs) for alpha when the model is damped, and keep the order theta_d then omega_d.",
+        hint="use damper_eom (not euler_eqs) for alpha when the "
+        "model is damped, and keep the order theta_d then omega_d.",
     )
     s.run(
         f,
         "damped: known value",
         damped_known,
         needs=("damper_eom", "quaternion_derivative"),
-        hint="this fails only if damper_eom or quaternion_derivative is wrong -- fix those first.",
+        hint="this fails only if damper_eom or quaternion_derivative"
+        " is wrong or not implemented -- fix those first.",
     )
 
 
@@ -608,14 +606,14 @@ def _check_damper(s: _Suite) -> None:
         rng = _rand(6)
         for _ in range(6):
             w = rng.normal(size=3)
-            I = rng.uniform(2.0, 10.0, size=3)
+            Im = rng.uniform(2.0, 10.0, size=3)
             Id = rng.uniform(0.05, 0.5)
             D, K = rng.uniform(0.1, 5.0), rng.uniform(0.1, 5.0)
             th, om = rng.normal(), rng.normal()
-            a, _, od = s.fn(f)(w, np.diag(I), Id, D, K, th, om)
+            a, _, od = s.fn(f)(w, np.diag(Im), Id, D, K, th, om)
             a = np.asarray(a, float)
-            H = I * w + np.array([0.0, Id * om, 0.0])
-            Hdot = I * a + np.array([0.0, Id * float(od), 0.0])
+            H = Im * w + np.array([0.0, Id * om, 0.0])
+            Hdot = Im * a + np.array([0.0, Id * float(od), 0.0])
             resid = Hdot + np.cross(w, H)
             if np.abs(resid).max() > 1e-7 * max(1.0, np.abs(H).max()):
                 return False, f"dH/dt + omega x H = {_fmt(resid)} (should be 0)"
@@ -627,14 +625,14 @@ def _check_damper(s: _Suite) -> None:
         rng = _rand(7)
         for _ in range(6):
             w = rng.normal(size=3)
-            I = rng.uniform(2.0, 10.0, size=3)
+            Im = rng.uniform(2.0, 10.0, size=3)
             Id = rng.uniform(0.05, 0.5)
             D, K = rng.uniform(0.1, 5.0), rng.uniform(0.1, 5.0)
             th, om = rng.normal(), rng.normal()
-            a, td, od = s.fn(f)(w, np.diag(I), Id, D, K, th, om)
+            a, td, od = s.fn(f)(w, np.diag(Im), Id, D, K, th, om)
             a = np.asarray(a, float)
             dT = (
-                float(w @ (I * a))
+                float(w @ (Im * a))
                 + Id * om * float(od)
                 + Id * (a[1] * om + w[1] * float(od))
                 + K * th * float(td)

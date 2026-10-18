@@ -1,8 +1,9 @@
-"""Part 4 -- the energy-dissipating damper (a sprung, damped reaction wheel).
+"""Part 4 -- energy-dissipating damper (sprung, damped reaction wheel)
 
-The damper wheel spins about body axis 2. It adds two state variables,
-``theta_d`` (wheel angle) and ``omega_d`` (wheel rate), and modifies the
-angular-acceleration equations. Implement Eqs 1-5 of the Part 4 handout here.
+The damper wheel adds two state variables,
+``theta_d`` (wheel angle) and ``omega_d`` (wheel rate), and modifies
+the angular-acceleration equations. Implement equations from the
+handout for Part 4.
 """
 
 from __future__ import annotations
@@ -19,39 +20,35 @@ def damper_eom(
     theta_d: float,
     omega_d: float,
 ) -> tuple[np.ndarray, float, float]:
-    """Equations of motion for the damped rigid body (Part 4, Eqs 1-5).
+    """Equations of motion for the damped rigid body (Part 4).
 
     Parameters
     ----------
     omega : (3,) ndarray
-        Body angular velocity (rad/s).
+        Body angular velocity (rad/s)
     J : (3, 3) ndarray
-        Diagonal principal inertia matrix; ``I1, I2, I3 = diag(J)``.
+        Diagonal principal inertia matrix; ``I1, I2, I3 = diag(J)``
     Id : float
-        Damper-wheel moment of inertia (kg-m^2).
+        Damper-wheel moment of inertia (kg-m^2)
     D : float
-        Damping coefficient (N-m/(rad/s)).
+        Damping coefficient (N-m/(rad/s))
     K : float
-        Spring coefficient (N-m/rad).
+        Spring coefficient (N-m/rad)
     theta_d : float
-        Damper-wheel angle (rad).
+        Damper-wheel angle (rad)
     omega_d : float
-        Damper-wheel rate (rad/s).
+        Damper-wheel rate (rad/s)
 
     Returns
     -------
     alpha : (3,) ndarray
-        Body angular acceleration (rad/s^2).
+        Body angular acceleration (rad/s^2) vector in body-fixed
+        coordinates
     theta_d_dot : float
-        Equals ``omega_d`` (Eq 4).
+        Equals ``omega_d`` angular speed of the damper wheel
     omega_d_dot : float
-        Damper-wheel angular acceleration (Eq 5).
-
-    Notes
-    -----
-    Eq 5 uses the result of Eq 2 -- compute ``alpha2`` before ``omega_d_dot``.
+        Angular acceleration of the damper wheel
     """
     raise NotImplementedError(
-        "Part 4: implement damper_eom in src/aste586/dynamics/damper.py -- "
-        "Eqs 1-5 of the handout"
+        "Part 4: implement damper_eom in " "src/aste586/dynamics/damper.py"
     )

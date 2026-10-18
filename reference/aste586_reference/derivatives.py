@@ -21,7 +21,7 @@ def state_derivative(t: float, z: np.ndarray, params: Params) -> np.ndarray:
         alpha = euler_eqs(omega, params.J, params.torque)
         return np.concatenate([alpha, q_dot])
 
-    if params.model == "damped":
+    elif params.model == "damped":
         theta_d = z[IDX_THETA_D]
         omega_d = z[IDX_OMEGA_D]
         alpha, theta_d_dot, omega_d_dot = damper_eom(
@@ -29,4 +29,5 @@ def state_derivative(t: float, z: np.ndarray, params: Params) -> np.ndarray:
         )
         return np.concatenate([alpha, q_dot, [theta_d_dot, omega_d_dot]])
 
-    raise ValueError(f"unknown model {params.model!r}")
+    else:
+        raise ValueError(f"unknown model {params.model!r}")
