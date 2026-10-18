@@ -22,6 +22,7 @@ def test_numpy_importable():
     the user-level site-packages (~/.local or ~/Library/Python/3.9/).
     """
     import numpy as np  # noqa: F401
+
     assert np.__version__
 
 
@@ -29,6 +30,7 @@ def test_matplotlib_importable():
     """matplotlib must import without a circular-import or C-extension error."""
     if "matplotlib" in sys.modules:
         import matplotlib  # noqa: F401
+
         return
     mod = importlib.import_module("matplotlib")
     assert mod is not None
@@ -38,7 +40,13 @@ def test_matplotlib_agg_backend():
     """The Agg (headless) backend must be selectable; this exercises the C
     extension layer that '_c_internal_utils' circular-import errors break."""
     import matplotlib
+
     matplotlib.use("Agg")
+    import matplotlib.pyplot as plt  # noqa: F401
+
+
+def test_matplotlib_default_backend():
+    """The default backend must be selectable for aste586 plot --show"""
     import matplotlib.pyplot as plt  # noqa: F401
 
 

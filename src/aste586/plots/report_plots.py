@@ -17,10 +17,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")  # headless: write files, never pop a window
-import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
 from ..io import RunArtifact, run_dir  # noqa: E402
@@ -28,14 +24,34 @@ from ..io import RunArtifact, run_dir  # noqa: E402
 _DEG = 180.0 / np.pi
 
 
-def plot_run(artifact: RunArtifact) -> list[Path]:
+def import_pyplot(show):
+    """
+    If I don't set Agg before importing pyplot, then
+    matplotlib tries to setup interactive plotting. On macos,
+    this typically launches XQuartz. If show is True, that setup and
+    launch is unnecessary.
+    """
+    if not show:
+        from matplotlib import use
+
+        # headless: write files, never pop a window
+        use("Agg")
+    import matplotlib.pyplot as plt  # noqa: E402
+
+    return plt
+
+
+def plot_run(artifact: RunArtifact, show: bool) -> list[Path]:
     """Render every applicable figure for ``artifact``; return the PNG paths."""
+    plt = import_pyplot(show)
     out_dir = run_dir(artifact.scenario, artifact.backend)
     if artifact.meta["model"] == "linear":
-        figs = _plot_linear(artifact)
+        figs = _plot_linear(artifact, plt)
     else:
-        figs = _plot_attitude(artifact)
-
+        figs = _plot_attitude(artifact, plt)
+    if show:
+        plt.ioff()
+        plt.show()
     paths = []
     for name, fig in figs:
         path = out_dir / f"{name}.png"
@@ -45,12 +61,13 @@ def plot_run(artifact: RunArtifact) -> list[Path]:
     return paths
 
 
-def _plot_linear(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
+def _plot_linear(a: RunArtifact, plt) -> list[tuple[str, plt.Figure]]:  # noqa: F821
     t = a["time"]
     x, x_a, err = a["x"], a["x_analytical"], a["error"]
 
-    fig1, axes = plt.subplots(2, 2, figsize=(10, 6), sharex=True,
-                              constrained_layout=True)
+    fig1, axes = plt.subplots(
+        2, 2, figsize=(10, 6), sharex=True, constrained_layout=True
+    )
     for k, ax in enumerate(axes.flat):
         ax.plot(t, x[:, k], label="numerical")
         ax.plot(t, x_a[:, k], "--", label="analytical")
@@ -68,11 +85,10 @@ def _plot_linear(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
     ax2.plot(t, a["conserved"])
     ax2.set(title=r"$\sum x_i^2 - 2$", xlabel="time (s)")
     ax2.grid(alpha=0.3)
-
     return [("components", fig1), ("accuracy", fig2)]
 
 
-def _plot_attitude(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
+def _plot_attitude(a: RunArtifact, plt) -> list[tuple[str, plt.Figure]]:  # noqa: F821
     t = a["time"]
     axis = a.meta.get("analysis", {}).get("reference_axis", 3)
     damped = a.meta["model"] == "damped"
@@ -85,7 +101,8 @@ def _plot_attitude(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
     for k, lbl in enumerate(("w1", "w2", "w3")):
         ax.plot(t, a["omega"][:, k], label=lbl)
     ax.set(title="angular velocity, body coords (rad/s)", xlabel="time (s)")
-    ax.legend(); ax.grid(alpha=0.3)
+    ax.legend()
+    ax.grid(alpha=0.3)
 
     ax = axes[0, 1]
     th = a["theta"] * _DEG
@@ -101,7 +118,8 @@ def _plot_attitude(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
     ax.plot(t, a["psi"] * _DEG, label="precession psi")
     ax.plot(t, a["phi"] * _DEG, label="spin phi")
     ax.set(title="3-1-3 precession and spin, unwrapped (deg)", xlabel="time (s)")
-    ax.legend(); ax.grid(alpha=0.3)
+    ax.legend()
+    ax.grid(alpha=0.3)
 
     ax = axes[1, 0]
     ax.plot(t, a["q_norm"] - 1.0)
@@ -113,17 +131,22 @@ def _plot_attitude(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
     for k, lbl in enumerate(("Hx", "Hy", "Hz")):
         ax.plot(t, H[:, k] - H[0, k], label=lbl)
     ax.set(title="angular momentum drift, inertial frame (kg m^2/s)", xlabel="time (s)")
-    ax.legend(); ax.grid(alpha=0.3)
+    ax.legend()
+    ax.grid(alpha=0.3)
 
     ax = axes[1, 2]
     T = a["T"]
     if damped:
         ax.plot(t, T)
-        ax.set(title="kinetic + spring energy T (J), should decrease", xlabel="time (s)")
+        ax.set(
+            title="kinetic + spring energy T (J), should decrease", xlabel="time (s)"
+        )
     else:
         ax.plot(t, T - T[0])
-        ax.set(title=f"kinetic energy drift T - T(0) (J), T(0) = {T[0]:.4g} J",
-               xlabel="time (s)")
+        ax.set(
+            title=f"kinetic energy drift T - T(0) (J), T(0) = {T[0]:.4g} J",
+            xlabel="time (s)",
+        )
     ax.grid(alpha=0.3)
     fig.suptitle(f"{a.scenario} [{a.backend}]: time histories")
     figs.append(("time_histories", fig))
@@ -141,16 +164,25 @@ def _plot_attitude(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
     ax.set_ylim(centre[1] - half, centre[1] + half)
     ax.set_zlim(centre[2] - half, centre[2] + half)
     ax.set_box_aspect((1, 1, 1))
-    ax.set(xlabel="w1 (rad/s)", ylabel="w2 (rad/s)", zlabel="w3 (rad/s)",
-           title=f"{a.scenario}: polhode (omega in body coords)")
+    ax.set(
+        xlabel="w1 (rad/s)",
+        ylabel="w2 (rad/s)",
+        zlabel="w3 (rad/s)",
+        title=f"{a.scenario}: polhode (omega in body coords)",
+    )
     ax.legend(loc="upper left")
     figs.append(("polhode", fig))
 
     # --- Optional panels ---------------------------------------------------
     extra = []
     if "omega_error" in a:
-        extra.append(("|omega - analytical| (rad/s)",
-                      np.maximum(a["omega_error"].max(axis=1), 1e-300), True))
+        extra.append(
+            (
+                "|omega - analytical| (rad/s)",
+                np.maximum(a["omega_error"].max(axis=1), 1e-300),
+                True,
+            )
+        )
     if "off_nadir" in a:
         extra.append(("off-nadir angle (deg)", a["off_nadir"] * _DEG, False))
     if "theta_d" in a:
@@ -159,8 +191,13 @@ def _plot_attitude(a: RunArtifact) -> list[tuple[str, plt.Figure]]:
         extra.append(("damper wheel rate omega_d (rad/s)", a["omega_d"], False))
 
     if extra:
-        fig, axes = plt.subplots(1, len(extra), figsize=(5 * len(extra), 4),
-                                 squeeze=False, constrained_layout=True)
+        fig, axes = plt.subplots(
+            1,
+            len(extra),
+            figsize=(5 * len(extra), 4),
+            squeeze=False,
+            constrained_layout=True,
+        )
         for ax, (title, data, logy) in zip(axes[0], extra):
             (ax.semilogy if logy else ax.plot)(t, data)
             ax.set(title=title, xlabel="time (s)")
